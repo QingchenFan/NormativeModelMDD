@@ -23,10 +23,9 @@ mFC = np.tanh(mfizFC)
 gp = GradientMaps(kernel='normalized_angle', approach='dm', alignment='procrustes', n_components=10,
                   random_state=0)
 
-ref = scio.loadmat('./Data135_HC_GroupGradient.mat')
-ref = scio.loadmat('/Volumes/QCI/HCPData/GroupGradient.mat')
-#gp.fit(mFC,reference=ref['data'])
-gp.fit(mFC)
+ref = scio.loadmat('/Users/qingchen/Documents/code/NormativeModelMDD/Step_2nd_CalculateGradient/HCP/GroupGradient.mat')
+gp.fit(mFC,reference=ref['data'])
+#gp.fit(mFC)
 res = gp.gradients_
 
 savemat('Data135_MDD_GroupGradient.mat', {'data':res})
