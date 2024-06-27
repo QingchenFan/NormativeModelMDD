@@ -6,6 +6,7 @@ from brainspace.gradient import GradientMaps
 from brainspace.plotting import plot_hemispheres
 from brainspace.utils.parcellation import map_to_labels
 from scipy.io import savemat
+import matplotlib.pyplot as plt
 
 path = '/Volumes/QCI/NormativeModel/Data135/MDD/Data135_Schaefer400FC_mat/*/sub*'
 
@@ -20,15 +21,15 @@ for i in dataList:
 mfizFC = box / len(dataList)
 mFC = np.tanh(mfizFC)
 
+ref = scio.loadmat('/Users/qingchen/Documents/code/NormativeModelMDD/Step_2nd_CalculateGradient/HCP/GroupGradient.mat')
+
 gp = GradientMaps(kernel='normalized_angle', approach='dm', alignment='procrustes', n_components=10,
                   random_state=0)
-
-ref = scio.loadmat('/Users/qingchen/Documents/code/NormativeModelMDD/Step_2nd_CalculateGradient/HCP/GroupGradient.mat')
-gp.fit(mFC,reference=ref['data'])
-#gp.fit(mFC)
+#gp.fit(mFC,reference=ref['data'])
+gp.fit(mFC)
 res = gp.gradients_
 
-savemat('Data135_MDD_GroupGradient.mat', {'data':res})
+savemat('Data135_MDD_GroupGradient2.mat', {'data2':res})
 
 # Plot brain gradient
 labeling = load_parcellation('schaefer', scale=400, join=True)
@@ -43,3 +44,10 @@ for i in range(2):
 
 plot_hemispheres(surf_lh, surf_rh, array_name=grad, size=(2000, 800), cmap='coolwarm',
                  color_bar=True, label_text=['Grad1', 'Grad2'], zoom=1)
+
+fig, ax = plt.subplots(1, figsize=(5, 4))
+ax.scatter(range(gp.lambdas_.size), gp.lambdas_)
+ax.set_xlabel('Component Nb')
+ax.set_ylabel('Eigenvalue')
+
+plt.show()

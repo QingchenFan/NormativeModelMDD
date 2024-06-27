@@ -7,11 +7,11 @@ from brainspace.plotting import plot_hemispheres
 from brainspace.utils.parcellation import map_to_labels
 from scipy.io import savemat
 
-path = '/Volumes/QCI/NormativeModel/Data135/MDD/Data135_Schaefer400FC_mat/*/sub*'
+path = '/Volumes/QCI/NormativeModel/Data135/HC/Data135_Schaefer400FC_mat/*/sub*'
 
 dataList = glob.glob(path)
 databox = []
-ref = scio.loadmat('/Volumes/QCI/NormativeModel/Data135/MDD/Data135_MDD_GroupGradient.mat')
+ref = scio.loadmat('/Volumes/QCI/NormativeModel/Data135/HC/Data135_HC_GroupGradient.mat')
 
 for i in dataList:
     data = scio.loadmat(i)['data']

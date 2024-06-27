@@ -2,10 +2,10 @@ import glob
 import os.path
 from shutil import copy
 
-path = glob.glob('/Volumes/QCII/duilie/duilie_2024512/nifti/V01/*')
+path = glob.glob('/Volumes/QCI/DuiLie_MDD87_143_nii/Volumes/QCI/DuiLie_MDD87_143_DICOM/*')
 
 for i in path:
-    # print('i--',i)
+    print('i--',i)
     # if 'HC' in i :
     #     subid = i[-8:]
     #     print('subid------',subid)
@@ -62,17 +62,18 @@ for i in path:
     #     else:
     #         print('No T1w：', i)
 
-
+    #
     if 'MDD' in i:
-        subid = i[-9:]
+
+        subid = i[-8:-2] + 'V01'
         print('subid------', subid)
 
-        funcAPpath = glob.glob(i+'/*Functional*AP*5.nii')
-        funcAPJSONpath = glob.glob(i+'/*Functional*AP*.json')
+        funcAPpath = glob.glob(i+'/*Functional*AP*5.nii.gz')
+        funcAPJSONpath = glob.glob(i+'/*Functional*AP*5.json')
 
-        T1wpath = glob.glob(i+'/*t1*.nii')
+        T1wpath = glob.glob(i+'/*t1*.nii.gz')
         T1wJSONpath = glob.glob(i + '/*t1*.json')
-        fmpath = glob.glob(i + '/*field_mapping*3.5*.json')
+        fmpath = sorted(glob.glob(i + '/*field_mapping*3.5*.json'))
         print('fmpath------', fmpath)
 
         newpath = '/Volumes/QCII/duilie/BIDS/V1/' + 'sub-' + subid
@@ -94,28 +95,28 @@ for i in path:
                 n = p.split('/')[-1][:-5]
                 ph = p[:-5]
                 inx = inx + 1
-                fm = ph + '.nii'
+                fm = ph + '.nii.gz'
                 copy(p, fieldmappath + '/sub-' + subid + '_acq-v1_magnitude' + str(inx) + '.json')
-                copy(fm, fieldmappath + '/sub-' + subid + '_acq-v1_magnitude' + str(inx) + '.nii')
+                copy(fm, fieldmappath + '/sub-' + subid + '_acq-v1_magnitude' + str(inx) + '.nii.gz')
             else:
                 n = p.split('/')[-1][:-5]
                 ph = p[:-5]
-                fm = ph + '.nii'
+                fm = ph + '.nii.gz'
                 copy(p, fieldmappath + '/sub-' + subid + '_phasediff.json')
-                copy(fm, fieldmappath + '/sub-' + subid + '_phasediff.nii')
+                copy(fm, fieldmappath + '/sub-' + subid + '_phasediff.nii.gz')
 
         if len(funcAPpath) != 0:
-            copy(funcAPpath[0], funpath + '/sub-' + subid + '_task-rest_acq-ap_run-1_bold.nii')
+            copy(funcAPpath[0], funpath + '/sub-' + subid + '_task-rest_acq-ap_run-1_bold.nii.gz')
             copy(funcAPJSONpath[0], funpath + '/sub-' + subid + '_task-rest_acq-ap_run-1_bold.json')
         else:
             print('No funcAP：', i)
 
         if len(T1wpath) != 0:
-            copy(T1wpath[0], t1wpath + '/sub-' + subid + '_T1w.nii')
+            copy(T1wpath[0], t1wpath + '/sub-' + subid + '_T1w.nii.gz')
             copy(T1wJSONpath[0], t1wpath + '/sub-' + subid + '_T1w.json')
         else:
             print('No T1w：', i)
-    #
+    # #
     # if 'BP' in i:
     #         subid = i[-9:]
     #         print('subid------', subid)
